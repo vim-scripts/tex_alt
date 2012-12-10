@@ -1,0 +1,9 @@
+--langdef=tex_alt
+--langmap=tex_alt:.tex
+--regex-tex_alt=/\\label\{([^}]*)\}/\1/l,label/
+--regex-tex_alt=/\\part\{(\\label\{.*\})?([^}]*)\}/\2/s,part/
+--regex-tex_alt=/\\chapter\{(\\label\{.*\})?([^}]*)\}/\2/s,chapter/
+--regex-tex_alt=/\\section\{(\\label\{.*\})?([^}]*)\}/\2/s,section/
+--regex-tex_alt=/\\subsection\{(\\label\{.*\})?([^}]*)\}/. \2/s,subsection/
+--regex-tex_alt=/\\subsubsection\{(\\label\{.*\})?([^}]*)\}/.. \2/s,subsubsection/
+--regex-tex_alt=/\\paragraph\{(\\label\{.*\})?([^}]*)\}/... \2/s,paragraph/

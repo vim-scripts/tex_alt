@@ -1,0 +1,103 @@
+*tex_alt.txt*	For Vim version 7.3		Last change: 2012 December 10
+
+
+
+==============================================================================
+CONTENTS						*tex_alt-contents*
+
+	1. Purpose .................................... |tex_alt-purpose|
+	2. Installation ............................... |tex_alt-installation|
+	3. Usage ...................................... |tex_alt-usage|
+	4. Contact &c. ................................ |tex_alt-contact|
+
+
+==============================================================================
+1. Purpose						*tex_alt-purpose*
+
+The purpose of tex_alt is to provide lightweight alternative support for TeX
+in Vim.
+
+The problem with the out-of-the-box support is that its both missing many
+useful features, and slow. Packages such as atp-vim and similar are fantastic
+proofs of Vim’s extensibility, but they add so many features that doing some
+actual writing becomes unbearably slow. And the fact is, I don't use some 90%
+of those features anyway.
+
+So here’s tex_alt. It’s not a lot of a bundle, really, but it will give you
+basic syntax highlighting, it will set some settings which make writing TeX
+in Vim much more pleasurable, and it will not burden and slow Vim down
+too much.
+
+Note that I’m a linguist and tex_alt is essentially my own settings bundled
+together. It’s not made with mathematics in mind. It doesn’t really provide
+any support for it. I’m afraid you’ll need to add it yourself. Sorry.
+
+
+==============================================================================
+2. Installation						 *tex_alt-installation*
+
+The Git repo will be cloned together with a directory structure. Simply copy
+the files to the corresponding directories in your ~/.vim folder. (You might
+need to create them first.)
+
+The _ctags file needs to be copied to ~/.ctags (mind the dot before the name).
+If you already have this file, do not overwrite it. Append the contents to it.
+
+If you want Vim to automatically assume all .tex files are tex_alt, append
+this to your ~/.vimrc: >
+	autocmd BufRead,BufNewFile *.tex set filetype=tex_alt
+
+If you want to make full use of tex_alt, you will also need to install:
+* Ctags (http://ctags.sourceforge.net/),
+* Kellys colorscheme (http://www.vim.org/scripts/script.php?script_id=2463),
+* SnipMate (http://www.vim.org/scripts/script.php?script_id=2540), and
+* Tagbar (http://www.vim.org/scripts/script.php?script_id=3465).
+
+Ctags are required by Tagbar, which displays a nice outline of the document.
+Kellys is a colorscheme of mine which goes well with tex_alt’s syntax
+definition. I don’t guarantee it will be very useful with any other scheme.
+SnipMate implements very useful TextMate-like snippets for Vim.
+
+
+==============================================================================
+3. Usage						*tex_alt-usage*
+
+tex_alt will map two keys:
+* <F9> to compile the currently focused file and open the quickfix window, and
+* <F12> to toggle the Tagbar window.
+
+You can change the default TeX flavour by setting >
+	let b:tex_alt_flavour = "INSERT YOUR FLAVOUR HERE"
+
+The following of Vim’s options will be extended:
+* 'iskeyword' to allow for autocompletion of labels of the format
+	“ssec:tex_alt-usage” (press <C-n> after you get to the colon),
+* 'synmaxcol' to 3000, because I assume you had it low to retain sanity while
+	viewing XML files, and
+* 'wildignore' to make Vim ignore .aux, .dvi, .log and .pdf files when you
+	want it to complete the name of a file you’re trying to open.
+
+I recommend that you use the Kellys colorscheme with tex_alt. Much of the
+point of tex_alt’s syntax file will be lost without it.
+
+tex_alt also provides Ctags definitions for TeX which I think are smarter than
+what can be found on the web, because they extract labels from inside section
+names. It’s not very nice to have Tagbar display section name that begins
+with “\label{…”.
+
+There’s also a stripped down definition for SnipMate. It should be easy enough
+to extend it on your own if you feel you need more.
+
+
+==============================================================================
+4. Contact &c.						*tex_alt-contact*
+
+
+The license is GPL3+. You can contact me at kamil.stachowski@at@gmail.com.
+
+0.1	2012.12.10
+	initial release
+
+
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:

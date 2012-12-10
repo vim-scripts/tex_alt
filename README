@@ -1,0 +1,17 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=4352
+
+tex_alt is an alternative, lightweight support for LaTeX in Vim. There are many bundles that aim to do the same thing and possibly do it better, but this one is mine. Also, its much faster.
+
+tex_alt provides:
+* lighter, faster and less complete syntax highlighting,
+* autocompletion for commands, files and tags,
+* auto tag regeneration on file open and save,
+* basic compilation with a QuickFix window,
+* some more convenience settings.
+
+tex_alt doesnt provide:
+* support for BibTeX,
+* support for mathematics, and
+* almost and IDE kind of behaviour in general.
+
+Screenshot: http://imageshack.us/photo/my-images/600/texalt02.png/
