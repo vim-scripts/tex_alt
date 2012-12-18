@@ -7,3 +7,5 @@
 --regex-tex_alt=/\\subsection\{(\\label\{.*\})?([^}]*)\}/. \2/s,subsection/
 --regex-tex_alt=/\\subsubsection\{(\\label\{.*\})?([^}]*)\}/.. \2/s,subsubsection/
 --regex-tex_alt=/\\paragraph\{(\\label\{.*\})?([^}]*)\}/... \2/s,paragraph/
+--regex-tex_alt=/^\\includegraphics[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/g,graphics/
+--regex-tex_alt=/^\\lstinputlisting[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{([^}]+)\}/\3/g,graphics/

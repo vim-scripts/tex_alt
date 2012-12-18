@@ -1,4 +1,4 @@
-*tex_alt.txt*	For Vim version 7.3		Last change: 2012 December 10
+*tex_alt.txt*	For Vim version 7.3		Last change: 2012 December 18
 
 
 
@@ -14,27 +14,44 @@ CONTENTS						*tex_alt-contents*
 ==============================================================================
 1. Purpose						*tex_alt-purpose*
 
-The purpose of tex_alt is to provide lightweight alternative support for TeX
-in Vim.
 
-The problem with the out-of-the-box support is that its both missing many
-useful features, and slow. Packages such as atp-vim and similar are fantastic
+tex_alt is an alternative, lightweight support for LaTeX in Vim. There are
+many bundles that aim to do the same thing and possibly do it better, but this
+one is mine. Also, it’s much faster.
+
+The problem with the out-of-the-box support, is that its both missing many
+useful features, and slow. Packages such as atp-vim and others are fantastic
 proofs of Vim’s extensibility, but they add so many features that doing some
-actual writing becomes unbearably slow. And the fact is, I don't use some 90%
-of those features anyway.
+actual writing might become unbearably slow. And the fact is, I don’t use
+some 90% of those features anyway.
 
 So here’s tex_alt. It’s not a lot of a bundle, really, but it will give you
-basic syntax highlighting, it will set some settings which make writing TeX
-in Vim much more pleasurable, and it will not burden and slow Vim down
-too much.
+a syntax highlighting, autocompletion where it’s most needed, it will set
+some settings to make writing TeX in Vim much more pleasurable, and it will
+not burden and slow Vim down too much.
 
 Note that I’m a linguist and tex_alt is essentially my own settings bundled
 together. It’s not made with mathematics in mind. It doesn’t really provide
 any support for it. I’m afraid you’ll need to add it yourself. Sorry.
 
+-----
+
+What tex_alt provides:
+* lighter, faster and less complete syntax highlighting,
+* autocompletion for commands and tags,
+* auto tag regeneration on file open and save,
+* basic compilation with a QuickFix window,
+* some more convenience settings.
+
+What tex_alt doesn’t provide:
+* support for BibTeX,
+* support for mathematics, and
+* almost and IDE kind of behaviour in general.
+
 
 ==============================================================================
 2. Installation						 *tex_alt-installation*
+
 
 The Git repo will be cloned together with a directory structure. Simply copy
 the files to the corresponding directories in your ~/.vim folder. (You might
@@ -43,9 +60,15 @@ need to create them first.)
 The _ctags file needs to be copied to ~/.ctags (mind the dot before the name).
 If you already have this file, do not overwrite it. Append the contents to it.
 
+After the installation, you will probably need to run >
+    :helptags ~/.vim/doc
+to be able to access this file through Vim’s help.
+
+-----
+
 If you want Vim to automatically assume all .tex files are tex_alt, append
 this to your ~/.vimrc: >
-	autocmd BufRead,BufNewFile *.tex set filetype=tex_alt
+    autocmd BufRead,BufNewFile *.tex set filetype=tex_alt
 
 If you want to make full use of tex_alt, you will also need to install:
 * Ctags (http://ctags.sourceforge.net/),
@@ -53,7 +76,7 @@ If you want to make full use of tex_alt, you will also need to install:
 * SnipMate (http://www.vim.org/scripts/script.php?script_id=2540), and
 * Tagbar (http://www.vim.org/scripts/script.php?script_id=3465).
 
-Ctags are required by Tagbar, which displays a nice outline of the document.
+Ctags are required by tagbar, which displays a nice outline of the document.
 Kellys is a colorscheme of mine which goes well with tex_alt’s syntax
 definition. I don’t guarantee it will be very useful with any other scheme.
 SnipMate implements very useful TextMate-like snippets for Vim.
@@ -62,31 +85,39 @@ SnipMate implements very useful TextMate-like snippets for Vim.
 ==============================================================================
 3. Usage						*tex_alt-usage*
 
+
+You can change the default LaTeX flavour by setting >
+    let b:tex_alt_flavour = "INSERT YOUR FLAVOUR HERE"
+
+If you notice slowdowns, you might try setting >
+    let b:tex_alt_auto_tags = 0
+to disable auto regeneration of tags on file open and save.
+
+-----
+
 tex_alt will map two keys:
-* <F9> to compile the currently focused file and open the quickfix window, and
-* <F12> to toggle the Tagbar window.
+* <F9> to compile the currently focused file and open the |quickfix| window, and
+* <F12> to toggle the |tagbar| window.
 
-You can change the default TeX flavour by setting >
-	let b:tex_alt_flavour = "INSERT YOUR FLAVOUR HERE"
+tex_alt will automatically open a completion popup (|ins-completion|) when it
+recognizes that you typed a backslash, ‘include{’, ‘includegraphics{’,
+‘input{’, or ‘ref{’. You can keep typing, or use the arrow keys or <C-n> and
+<C-p> to choose the word you meant to write. When it is highlighted, hit
+Enter or <C-y> to insert it. Cancel by pressing <C-e>.
+The dictionary is in ftplugin/tex_alt.dict. You can add and delete words in it
+to better adjust it to your needs.
 
-The following of Vim’s options will be extended:
-* 'iskeyword' to allow for autocompletion of labels of the format
-	“ssec:tex_alt-usage” (press <C-n> after you get to the colon),
-* 'synmaxcol' to 3000, because I assume you had it low to retain sanity while
-	viewing XML files, and
-* 'wildignore' to make Vim ignore .aux, .dvi, .log and .pdf files when you
-	want it to complete the name of a file you’re trying to open.
-
-I recommend that you use the Kellys colorscheme with tex_alt. Much of the
-point of tex_alt’s syntax file will be lost without it.
+If you installed |snipMate| (see above), you will be also able to use snippets.
+The list in tex_alt is not long, but they are very easy to write (see the
+‘snippets’ directory). To give you an idea, type ‘beg’ and press <Tab>.
 
 tex_alt also provides Ctags definitions for TeX which I think are smarter than
 what can be found on the web, because they extract labels from inside section
-names. It’s not very nice to have Tagbar display section name that begins
-with “\label{…”.
+names. It’s not very nice to have tagbar display section name that begins
+with ‘\label{…’.
 
-There’s also a stripped down definition for SnipMate. It should be easy enough
-to extend it on your own if you feel you need more.
+Apart from the above, some options will be set to make writing LaTeX in vim
+more pleasurable. You can inspect and adjust them in ftplugin/tex_alt.vim.
 
 
 ==============================================================================
@@ -94,7 +125,14 @@ to extend it on your own if you feel you need more.
 
 
 The license is GPL3+. You can contact me at kamil.stachowski@at@gmail.com.
+There is absolutely no guarantee whatsoever. Potentially, this bundle could
+even drink up your coffee.
 
+0.2	2012.12.18
+	syntax rewritten from scratch
+	added autocompletion for commands, includes and tags
+	added auto tag regeneration
+	added graphics to _ctags
 0.1	2012.12.10
 	initial release
 

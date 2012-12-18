@@ -1,4 +1,0 @@
-See doc/tex_alt.txt.
-
-You might need to run :helptags ~/.vim/doc
-after the installation to see the help in Vim.
