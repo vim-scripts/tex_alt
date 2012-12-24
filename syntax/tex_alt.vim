@@ -9,15 +9,11 @@ scriptencoding utf-8
 " = brew ================================================================================
 
 
-" save some
-let s:save_iskeyword=&iskeyword
-
 " has to be the first so that I can override it later
 syn	include @R syntax/r.vim
 syn	region texaltR start="<%" keepend end="%>" contains=@R
 
-" restore some
-let &iskeyword=s:save_iskeyword
+setlocal iskeyword+=:,-
 
 
 " = definitions =========================================================================

@@ -1,4 +1,4 @@
-*tex_alt.txt*	For Vim version 7.3		Last change: 2012 December 18
+*tex_alt.txt*	For Vim version 7.3		Last change: 2012 December 25
 
 
 
@@ -17,7 +17,7 @@ CONTENTS						*tex_alt-contents*
 
 tex_alt is an alternative, lightweight support for LaTeX in Vim. There are
 many bundles that aim to do the same thing and possibly do it better, but this
-one is mine. Also, it’s much faster.
+one is mine. Also, it scrolls so much faster.
 
 The problem with the out-of-the-box support, is that its both missing many
 useful features, and slow. Packages such as atp-vim and others are fantastic
@@ -41,12 +41,12 @@ What tex_alt provides:
 * autocompletion for commands and tags,
 * auto tag regeneration on file open and save,
 * basic compilation with a QuickFix window,
-* some more convenience settings.
+* some more convenience settings and mappings.
 
 What tex_alt doesn’t provide:
 * support for BibTeX,
 * support for mathematics, and
-* almost and IDE kind of behaviour in general.
+* almost any IDE kind of behaviour in general.
 
 
 ==============================================================================
@@ -65,10 +65,6 @@ After the installation, you will probably need to run >
 to be able to access this file through Vim’s help.
 
 -----
-
-If you want Vim to automatically assume all .tex files are tex_alt, append
-this to your ~/.vimrc: >
-    autocmd BufRead,BufNewFile *.tex set filetype=tex_alt
 
 If you want to make full use of tex_alt, you will also need to install:
 * Ctags (http://ctags.sourceforge.net/),
@@ -95,21 +91,27 @@ to disable auto regeneration of tags on file open and save.
 
 -----
 
-tex_alt will map two keys:
-* <F9> to compile the currently focused file and open the |quickfix| window, and
-* <F12> to toggle the |tagbar| window.
+tex_alt will map three keys:
+* <F9> to compile the currently focused file and open the |quickfix| window,
+* <F12> to toggle the |tagbar| window, and
+* <Leader>w to toggle line wrapping on and off.
+
+Also the behaviour of the arrows and <Home> and <End> will be redefined to
+make moving through long lines more Word-like.
 
 tex_alt will automatically open a completion popup (|ins-completion|) when it
 recognizes that you typed a backslash, ‘include{’, ‘includegraphics{’,
 ‘input{’, or ‘ref{’. You can keep typing, or use the arrow keys or <C-n> and
-<C-p> to choose the word you meant to write. When it is highlighted, hit
-Enter or <C-y> to insert it. Cancel by pressing <C-e>.
+<C-p> to choose the word you meant to write. When it is highlighted (the first
+proposition is highlighted automatically, hit Enter, Tab or <C-y> to insert
+it. Cancel by pressing <C-e> or <Right>.
 The dictionary is in ftplugin/tex_alt.dict. You can add and delete words in it
 to better adjust it to your needs.
 
 If you installed |snipMate| (see above), you will be also able to use snippets.
-The list in tex_alt is not long, but they are very easy to write (see the
-‘snippets’ directory). To give you an idea, type ‘beg’ and press <Tab>.
+The list in tex_alt is not too long, and essentially only includes the basic
+environments and sections, but snipMate snippets are very easy to write (see
+the ‘snippets’ directory). To give you an idea, type ‘beg’ and press <Tab>.
 
 tex_alt also provides Ctags definitions for TeX which I think are smarter than
 what can be found on the web, because they extract labels from inside section
@@ -117,7 +119,10 @@ names. It’s not very nice to have tagbar display section name that begins
 with ‘\label{…’.
 
 Apart from the above, some options will be set to make writing LaTeX in vim
-more pleasurable. You can inspect and adjust them in ftplugin/tex_alt.vim.
+more pleasurable. In particular, this includes mappings for more intuitive
+moving through wrapped lines, ignoring LaTeX auxiliary files when completing
+file names in the command lines, and others. You can inspect and adjust them
+in ftplugin/tex_alt.vim.
 
 
 ==============================================================================
@@ -128,6 +133,10 @@ The license is GPL3+. You can contact me at kamil.stachowski@at@gmail.com.
 There is absolutely no guarantee whatsoever. Potentially, this bundle could
 even drink up your coffee.
 
+0.21	2012.12.25
+	bugfixes mostly
+	added more snippets
+	added easier navigation through wrapped lines
 0.2	2012.12.18
 	syntax rewritten from scratch
 	added autocompletion for commands, includes and tags

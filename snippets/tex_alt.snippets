@@ -1,3 +1,5 @@
+# environments
+
 # begin
 snippet beg
 	\begin{${1:env}}
@@ -13,6 +15,12 @@ snippet enum
 	\begin{enumerate}
 		\item ${1}
 	\end{enumerate}
+# item
+snippet i
+	\item ${1}
+# item[]
+snippet i[
+	\item[${1}] ${2}
 # itemize
 snippet item
 	\begin{itemize}
@@ -20,6 +28,52 @@ snippet item
 	\end{itemize}
 # tabular
 snippet tab
-	\begin{${1:tabular}}{${2:c}}
+	\begin{${1:tabular}}{${2}}
 	${3}
 	\end{$1}
+
+
+# sections
+
+# part
+snippet part
+	\part{${1:title}}
+	\label{part:${2:$1}}
+
+	${3}
+# chapter
+snippet chap
+	\chapter{${1:title}}
+	\label{chap:${2:$1}}
+
+	${3}
+# section
+snippet sec
+	\section{${1:title}}
+	\label{sec:${2:$1}}
+
+	${3}
+# subsection
+snippet ssec
+	\subsection{${1:title}}
+	\label{ssec:${2:$1}}
+
+	${3}
+# subsubsection
+snippet sssec
+	\subsubsection{${1:title}}
+	\label{sssec:${2:$1}}
+
+	${3}
+# paragraph
+snippet par
+	\paragraph{${1:title}}
+	\label{par:${2:$1}}
+
+	${3}
+# subparagraph
+snippet spar
+	\subparagraph{${1:title}}
+	\label{subpar:${2:$1}}
+
+	${3}

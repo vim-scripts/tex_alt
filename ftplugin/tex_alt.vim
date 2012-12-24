@@ -19,16 +19,32 @@ let b:tex_alt_auto_tags = 1
 " =======================================================================================
 
 
-" - autocommands & maps -----------------------------------------------------------------
+" - autocommands ------------------------------------------------------------------------
+
 
 " update tags on file open and save
 if b:tex_alt_auto_tags
 	autocmd! BufRead,BufWrite *.tex call <SID>GenerateTags()
 endif
 
+
+" - maps --------------------------------------------------------------------------------
+
+
 " compile and open the quickfix window
 nnoremap <F9> :w<CR>:silent make % \| redraw! \| cw<CR>
 nnoremap <F12> :TagbarToggle<CR>
+nnoremap <silent> <Leader>w :set wrap!<CR>
+
+" reasonable moving thrgough wrapped lines
+noremap <Up> gk
+noremap <Down> gj
+noremap <expr> <Home> &wrap ? "g\<Home>" : "^"
+noremap <expr> <End> &wrap ? "g\<End>" : "$"
+inoremap <expr> <Up> pumvisible() ? "\<Up>" : "\<C-o>gk"
+inoremap <expr> <Down> pumvisible() ? "\<Down>" : "\<C-o>gj"
+inoremap <expr> <Home> &wrap ? "\<C-o>g\<Home>" : "\<C-o>^"
+inoremap <expr> <End> &wrap ? "\<C-o>g\<End>" : "\<C-o>$"
 
 
 " - completion --------------------------------------------------------------------------
@@ -39,8 +55,6 @@ setlocal completefunc=TexAltAutoComplete
 " let the user keep typing after the menu pops up,
 "	and open the menu even if there is nothing to match against yet
 setlocal completeopt=longest,menuone
-" make sure traditional LaTeX labels are understood
-setlocal iskeyword+=:,-
 " set the location of the dictionary
 let s:dictPath = fnameescape (expand("<sfile>:h") . "/tex_alt.dict")
 if &dictionary == ""
@@ -51,10 +65,10 @@ endif
 " smaller popup
 setlocal pumheight=20
 " auto completion popup
-inoremap \ \<C-x><C-u><C-n>
-inoremap <expr> { <SID>CheckComplKeyword()
+inoremap <buffer> \ \<C-x><C-u>
+inoremap <buffer> { {<C-x><C-u>
 " alternative key shortcut for completion
-inoremap <expr> <CR>	pumvisible() ? "\<C-y>" : "\<CR>"
+exe 'ino <buffer> <expr> <Tab> pumvisible() ? "\<C-y>" : "' . maparg("<Tab>", "i") . '"'
 
 
 " - options -----------------------------------------------------------------------------
@@ -65,6 +79,8 @@ filetype indent off
 setlocal synmaxcol=3000
 " exclude from autocompletion in file selection
 setlocal wildignore=*.aux,*.dvi,*.log,*.pdf
+" this is probably more often needed
+setlocal wrap
 
 " compilation
 let &makeprg = b:tex_alt_flavour . " -file-line-error -interaction=nonstopmode $*"
@@ -92,85 +108,68 @@ let g:tagbar_type_tex_alt = {
 
 " =======================================================================================
 
-" - s:CheckComplKeyword -----------------------------------------------------------------
-
-function! s:CheckComplKeyword ()
-	" Note: All new keywords must be added here, not just
-	"	to TexAltAutoComplete below.
-	if getline('.') =~ '\(include\(graphics\)\=\|input\|ref\)$'
-		return "{\<C-x>\<C-u>\<Down>"
-	else
-		return "{"
-	endif
-endfunction
-
-" - s:GenerateTags ----------------------------------------------------------------------
-
-function! s:GenerateTags ()
-	silent exe ":!ctags " . expand("%:p:h") . "/*.tex &> /dev/null &"
-endfunction
-
 " - TexAltAutoComplete ------------------------------------------------------------------
 
 function! TexAltAutoComplete (findstart, base)
 	" The function is run twice:
 	"	the first time, it finds out what kind of completion is required,
 	"	and the second time it does the actual completion.
-	" This function will only do any work if it’s run immediately
-	"	after the trigger (\ or {) is typed.
-	" Note: If ever to be extended, the new keywords must also be added
-	"	to s:CheckComplKeyword above.
+	" This function will only work properly if it’s run immediately
+	"	after the trigger is typed (\ or {).
 	if a:findstart		" the first run
-		if getline('.') =~ "\\\\$"
+		let line = getline('.')[0:col('.')-2]
+		if line =~ "\\\\$"
 			let s:complMode = 'dict'
 			return col('.')-1
-		elseif getline('.') =~ 'includegraphics{$'
+		elseif line =~ 'includegraphics{$'
 			let s:complMode = "incl-gr"
 			return col('.')-1
-		elseif getline('.') =~ '\(include\|input\){$'
+		elseif line =~ '\(include\|input\){$'
 			let s:complMode = "incl-tex"
 			return col('.')-1
-		elseif getline('.') =~ 'ref{$'
+		elseif line =~ 'ref{$'
 			let s:complMode = "ref"
 			return col('.')-1
 		else
 			return -3
 		endif
 	else				" the second run
+		let res = []
 		if s:complMode == "dict"
 			let tmp = split (&dictionary, ",")
-			let res = []
 			for i in tmp
 				let res = res + readfile (i)
 			endfor
-			return res
 		elseif s:complMode == "incl-gr"
 			setlocal wildignore-=*.pdf
 			let tmp = split (globpath('.','*.eps\|gif\|jpeg\|jpg\|pdf\|png'))
 			setlocal wildignore+=*.pdf
-			let res = []
 			for i in tmp
 				call add (res, i[2:-1])
 			endfor
-			return res
 		elseif s:complMode == "incl-tex"
 			let tmp = split (globpath('.','*.tex'))
-			let res = []
 			for i in tmp
 				call add (res, i[2:-5])
 			endfor
-			return res
 		elseif s:complMode == "ref"
 			let tmp = filter (taglist ("^"), 'v:val["kind"]=="l"')
-			let res = []
 			for i in tmp
 				call add (res, {"word":i["name"], "menu":i["filename"]})
 			endfor
-			return res
-		else
-			return []
 		endif
+		if res != []
+			call feedkeys ("\<Down>", "n")
+		endif
+		return res
 	endif
+endfunction
+
+" - s:GenerateTags ----------------------------------------------------------------------
+
+function! s:GenerateTags ()
+	let tmp = expand ("%:p:h")
+	silent exe ":!rm -rf ".tmp."/tags; ctags -R ".tmp."/*.tex &> /dev/null &"
 endfunction
 
 
